@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+    db:
+        image: mysql:latest
+        container_name: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: admin_kringetify
+            MYSQL_DATABASE: kringetify_soap_service
+            MYSQL_USER: kringetify
+            MYSQL_PASSWORD: soap_service
+        ports:
+            - "3308:3306"
