@@ -19,7 +19,7 @@ public class Log {
         this.description = description;
     }
     public String getDescription() {
-        return description;
+        return this.description;
     }
     public void setIP(String IP) {
         this.IP = IP;

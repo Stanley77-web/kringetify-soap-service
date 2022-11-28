@@ -3,6 +3,9 @@ services:
     db:
         image: mysql:latest
         container_name: mysql
+        volumes:
+            - ./com/kringetify/database/kringetify_soap.sql:/data/apps/soap.sql
+        command: --init-file /data/apps/soap.sql
         environment:
             MYSQL_ROOT_PASSWORD: admin_kringetify
             MYSQL_DATABASE: kringetify_soap_service
