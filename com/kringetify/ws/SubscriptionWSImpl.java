@@ -14,14 +14,13 @@ public class SubscriptionWSImpl implements SubscriptionWS {
     @Resource
     WebServiceContext webServiceContext;
 
-
     public SubscriptionWSImpl() {
         this.subscriptionHandler = new SubscriptionHandler();
     }
 
     @Override
-    public String createRequest(int creator_id, int subscriber_id) {
-        return this.subscriptionHandler.createRequest(
+    public String createSubscription(int creator_id, int subscriber_id) {
+        return this.subscriptionHandler.createSubscription(
                 creator_id, subscriber_id, this.webServiceContext.getMessageContext());
     }
 
@@ -32,7 +31,7 @@ public class SubscriptionWSImpl implements SubscriptionWS {
     }
 
     @Override
-    public List<Subscription> pendingRequest() {
-        return this.subscriptionHandler.pendingRequest(this.webServiceContext.getMessageContext());
+    public List<Subscription> pendingSubscription() {
+        return this.subscriptionHandler.pendingSubscription(this.webServiceContext.getMessageContext());
     }
 }
