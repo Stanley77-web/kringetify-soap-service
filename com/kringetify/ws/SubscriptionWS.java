@@ -1,20 +1,22 @@
 package com.kringetify.ws;
 
+import com.kringetify.models.Status;
 import com.kringetify.models.Subscription;
 
 import javax.jws.*;
 import java.util.List;
 
-@WebService
-@HandlerChain(file = "handler.xml")
+@WebService(name = "subs", targetNamespace = "http://www.kringetify.com/ws/")
 public interface SubscriptionWS {
-    @WebMethod
-    public String createSubscription(@WebParam(name = "creator_id") int creator_id,
-                                     @WebParam(name = "subscriber_id") int subscriber_id);
-    @WebMethod
-    public String makeApproval(@WebParam(name = "creator_id") int creator_id,
-                               @WebParam(name = "subscriber_id") int subscriber_id,
+    @WebMethod(operationName = "create")
+    public String createSubscription(@WebParam(name = "creatorId") int creatorId,
+                                     @WebParam(name = "subscriberId") int subscriberId);
+    @WebMethod(operationName = "approval")
+    public String makeApproval(@WebParam(name = "creatorId") int creatorId,
+                               @WebParam(name = "subscriberId") int subscriberId,
                                @WebParam(name = "approval") boolean approval);
-    @WebMethod
-    public @WebResult(name = "SubsResponse") List<Subscription> pendingSubscription();
+    @WebMethod(operationName = "pendingstatus") @WebResult(name = "SubsResponse")
+    public List<Subscription> findPendingSubscriptions();
+    @WebMethod(operationName = "allstatus") @WebResult(name = "subsResponse")
+    public List<Subscription> findAllSubscriptions();
 }

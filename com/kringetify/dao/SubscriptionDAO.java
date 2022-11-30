@@ -44,7 +44,8 @@ public class SubscriptionDAO {
             } else if (!resultSet.getString(3).equals(Status.PENDING.toString())) {
                 return "Failed to " + subs.getStatus().toString().toLowerCase()
                         + " " + subs.getSubscriberId() + " subscribe request to " + subs.getCreatorId()
-                        + ". Already made a request for approval ";
+                        + ". Already " + (resultSet.getString(3).equals("ACCEPTED") ? "accept" : "reject")
+                        + " this subscription request";
             }
 
             query = "UPDATE subscription SET status = ? WHERE creator_id = ? AND subscriber_id = ?";
@@ -63,17 +64,96 @@ public class SubscriptionDAO {
         }
     }
 
-    public List<Subscription> findAllWithStatus(Status status) {
+    public List<Subscription> findAllStatus(Status status) {
         List<Subscription> subscriptionList = new ArrayList<>();
-        String query = "SELECT * FROM subscription WHERE status = ?";
+        String query = "SELECT * FROM subscription";
+        boolean all = true;
+
+        if (status != null) {
+            query = "SELECT * FROM subscription WHERE status = ?";
+            all = false;
+        }
         try {
             PreparedStatement stmt = db.prepare(query);
-            stmt.setString(1, status.toString());
+            if (status != null) {
+                stmt.setString(1, status.toString());
+            }
             ResultSet resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
                 int creator_id = resultSet.getInt(1);
                 int subscriber_id = resultSet.getInt(2);
+
+                if (all) {
+                    String stringStatus = resultSet.getString(3);
+
+                    status = stringStatus.equals("PENDING") ?
+                            Status.PENDING :
+                            stringStatus.equals("ACCEPTED") ?
+                                    Status.ACCEPTED : Status.REJECTED;
+                }
+
+                subscriptionList.add(new Subscription(creator_id, subscriber_id, status));
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to fetch data. " + e.getMessage());
+        }
+        return subscriptionList;
+    }
+
+    public Status findStatusById(Subscription subs) {
+        String query = "SELECT * FROM subscription WHERE creator_id = ? AND subscriber_id = ?";
+        Status status = null;
+
+        try {
+            PreparedStatement stmt = db.prepare(query);
+            stmt.setInt(1, subs.getCreatorId());
+            stmt.setInt(2, subs.getSubscriberId());
+            ResultSet resultSet = stmt.executeQuery();
+
+            if (!resultSet.next()) {
+                return status;
+            }
+
+            query = "SELECT status FROM subscription WHERE creator_id = ? AND subscriber_id = ?";
+
+            stmt = db.prepare(query);
+            stmt.setInt(1, subs.getCreatorId());
+            stmt.setInt(2, subs.getSubscriberId());
+
+            resultSet = stmt.executeQuery();
+
+            if (resultSet.next()) {
+                String stringStatus = resultSet.getString(1);
+                status = stringStatus.equals("PENDING") ?
+                        Status.PENDING :
+                        stringStatus.equals("ACCEPTED") ?
+                                Status.ACCEPTED : Status.REJECTED;
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to fetch data. " + e.getMessage());
+        }
+        return status;
+    }
+
+    public List<Subscription> findById(int subscriberId) {
+        List<Subscription> subscriptionList = new ArrayList<>();
+        String query = "SELECT * FROM subscription WHERE subscriber_id = ?";
+        try {
+            PreparedStatement stmt = db.prepare(query);
+            stmt.setInt(1, subscriberId);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                int creator_id = resultSet.getInt(1);
+                int subscriber_id = resultSet.getInt(2);
+                String stringStatus = resultSet.getString(3);
+
+                Status status = stringStatus.equals("PENDING") ?
+                                    Status.PENDING :
+                                        stringStatus.equals("ACCEPTED") ?
+                                                Status.ACCEPTED : Status.REJECTED;
+
                 subscriptionList.add(new Subscription(creator_id, subscriber_id, status));
             }
         } catch (SQLException e) {

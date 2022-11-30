@@ -6,52 +6,90 @@
 
 Repository ini merupakan service soap untuk Kringetify Premium dengan menggunakan Jax-WS
 ## Run
-Untuk database masukkan script ini pada terminal
-`docker-compose up` <br>
-Untuk soap service masukkan script ini pada terminal
-`java -jar soap-service.jar`<br>
-Untuk melakukan request tembak endpoint `http://localhost:4790/ws/subscription?wsdl` pada postman<br>
-- Untuk request approval buat body request dalam xml seperti dibawah ini<br>
+Gunakan script `docker-compose up` pada terminal untuk database masukkan <br>
+Gunakan script `java -jar soap-service.jar` pada terminal untuk soap service<br><br><br>
+Tembak endpoint `http://localhost:4790/ws/subscription?wsdl` pada postman untuk melakukan request service subscription<br>
+- Request create buat envelope xml seperti dibawah ini
 ```
   <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
     <Header>
-        <apikey>apikey/apikey>
+        <apikey>apikey</apikey>
     </Header>
     <Body>
-        <createSubscription xmlns="http://ws.kringetify.com/">
-            <creator_id xmlns="">1</creator_id>
-            <subscriber_id xmlns="">2</subscriber_id>
-        </createSubscription>
+        <create xmlns="http://www.kringetify.com/ws/">
+            <creatorId xmlns="">[int]</creatorId>
+            <subscriberId xmlns="">[int]</subscriberId>
+        </create>
     </Body>
   </Envelope>
 ```
-- Untuk request create buat body dalam xml seperti dibawah ini
+- Request approal buat envelope xml seperti dibawah ini
 ```
   <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
     <Header>
-        <apikey>apikey/apikey>
+        <apikey>apikey</apikey>
     </Header>
     <Body>
-        <makeApproval xmlns="http://ws.kringetify.com/">
-            <creator_id xmlns="">[int]</creator_id>
-            <subscriber_id xmlns="">[int]</subscriber_id>
+        <approval xmlns="http://www.kringetify.com/ws/">
+            <creatorId xmlns="">[int]</creatorId>
+            <subscriberId xmlns="">[int]</subscriberId>
             <approval xmlns="">[boolean]</approval>
-        </makeApproval>
+        </approval>
     </Body>
   </Envelope>
 ```
-- Untuk request pending subs buat body dalam xml seperti dibawah ini
+- Request pending subs buat envelope xml seperti dibawah ini
 ```
   <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
     <Header>
-        <apikey>apikey/apikey>
+        <apikey>apikey</apikey>
     </Header>
     <Body>
-        <pendingSubscription xmlns="http://ws.kringetify.com/"/>
+        <pendingstatus xmlns="http://www.kringetify.com/ws/"/>
+    </Body>
+  </Envelope>
+```
+- Request semua subs buat envelope xml seperti dibawah ini
+```
+  <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Header>
+        <apikey>apikey</apikey>
+    </Header>
+    <Body>
+        <allstatus xmlns="http://www.kringetify.com/ws/"/>
     </Body>
   </Envelope>
 ```
 
+<br><br>
+Tembak endpoint `http://localhost:4790/ws/checkstatus?wsdl` pada postman untuk melakukan request service check status<br>
+- Request check status subs buat envelope xml seperti dibawah ini
+```
+  <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Header>
+        <apikey>apikey</apikey>
+    </Header>
+    <Body>
+        <subscriptionstatus xmlns="http://www.kringetify.com/ws/">
+            <creatorId xmlns="">[int]</creatorId>
+            <subscriberId xmlns="">[int]</subscriberId>
+        </subscriptionstatus>
+    </Body>
+  </Envelope>
+```
+- Request check user subs buat envelope xml seperti dibawah ini
+```
+  <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Header>
+        <apikey>apikey</apikey>
+    </Header>
+    <Body>
+        <subscriptions xmlns="http://ws.kringetify.com/">
+            <subscriberId xmlns="">[int]</subscriberId>
+        </subscriptions>
+    </Body>
+  </Envelope>
+```
 
 
 ## Spefisikasi

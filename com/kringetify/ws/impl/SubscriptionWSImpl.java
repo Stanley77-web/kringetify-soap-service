@@ -1,7 +1,9 @@
-package com.kringetify.ws;
+package com.kringetify.ws.impl;
 
 import com.kringetify.handlers.SubscriptionHandler;
+import com.kringetify.models.Status;
 import com.kringetify.models.Subscription;
+import com.kringetify.ws.SubscriptionWS;
 
 import javax.annotation.Resource;
 import javax.jws.*;
@@ -31,7 +33,13 @@ public class SubscriptionWSImpl implements SubscriptionWS {
     }
 
     @Override
-    public List<Subscription> pendingSubscription() {
-        return this.subscriptionHandler.pendingSubscription(this.webServiceContext.getMessageContext());
+    public List<Subscription> findPendingSubscriptions() {
+        return this.subscriptionHandler.subscriptions(
+                this.webServiceContext.getMessageContext(), Status.PENDING);
+    }
+    @Override
+    public List<Subscription> findAllSubscriptions() {
+        return this.subscriptionHandler.subscriptions(
+                this.webServiceContext.getMessageContext(),null);
     }
 }

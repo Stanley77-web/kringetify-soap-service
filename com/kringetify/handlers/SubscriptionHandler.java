@@ -4,7 +4,10 @@ import com.kringetify.dao.*;
 import com.kringetify.models.Log;
 import com.kringetify.models.Status;
 import com.kringetify.models.Subscription;
+import com.kringetify.utils.Helper;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.xml.internal.ws.api.message.Header;
+import com.sun.xml.internal.ws.api.message.HeaderList;
 import com.sun.xml.internal.ws.developer.JAXWSProperties;
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -14,75 +17,57 @@ import java.util.List;
 
 public class SubscriptionHandler {
     private SubscriptionDAO subscriptionDAO;
-    private LogDAO logDAO;
-    private Dotenv dotenv;
+    private Helper helper;
 
     public SubscriptionHandler() {
         this.subscriptionDAO = new SubscriptionDAO();
-        this.logDAO = new LogDAO();
-        this.dotenv = Dotenv.load();
+        this.helper = new Helper();
     }
     public String createSubscription(int creator_id, int subscriber_id, MessageContext context) {
         Subscription subscription = new Subscription(creator_id, subscriber_id);
-        String apikey = (String) context.get("apikey");
         String desc = subscription.toString();
+        desc = this.helper.validate(context, desc);
 
-        if (apikey != null && apikey.equals(dotenv.get("APIKEY_KRINGETIFY_PREMIUM"))) {
-            desc = "Kringetify premium " + desc;
-        } else if (apikey != null && apikey.equals(dotenv.get("APIKEY_REST_SERVICE"))) {
-            desc = "rest service " + desc;
-        } else {
-            return "failed to make a request. Please set correct apikey";
+        if ((desc.substring(0,6)).equals("Failed")) {
+            System.out.println(desc);
+            return desc;
         }
-
-        this.writeToLog(context, desc);
+        this.helper.writeToLog(context, desc, "http://localhost:4790/ws/subscription");
         return this.subscriptionDAO.create(subscription);
     }
 
     public String makeApproval(int creator_id, int subscriber_id, boolean approval, MessageContext context) {
         Subscription subscription = new Subscription(creator_id, subscriber_id, approval ? Status.ACCEPTED : Status.REJECTED);
-        String apikey = (String) context.get("apikey");
         String desc = (approval ? "accept " : "reject ") + subscriber_id + " subscription request to " + creator_id;
+        desc = this.helper.validate(context, desc);
 
-        if (apikey != null && apikey.equals(dotenv.get("APIKEY_KRINGETIFY_PREMIUM"))) {
-            desc = "Kringetify premium " + desc;
-        } else if (apikey != null && apikey.equals(dotenv.get("APIKEY_REST_SERVICE"))) {
-            desc = "Rest service " + desc;
-        } else {
-            return "Failed to make a request. Please set correct apikey";
+        if ((desc.substring(0,6)).equals("Failed")) {
+            System.out.println(desc);
+            return desc;
         }
-
-        this.writeToLog(context, desc);
+        this.helper.writeToLog(context, desc, "http://localhost:4790/ws/subscription");
         return this.subscriptionDAO.updateStatus(subscription);
     }
 
-    public List<Subscription> pendingSubscription(MessageContext context) {
-        List pendingRequest = new ArrayList<>();
-        String apikey = (String) context.get("apikey");
-        String desc = "fetch all pending Request";
-
-        if (apikey != null && apikey.equals(dotenv.get("APIKEY_KRINGETIFY_PREMIUM"))) {
-            desc = "Kringetify premium " + desc;
-        } else if (apikey != null && apikey.equals(dotenv.get("APIKEY_REST_SERVICE"))) {
-            desc = "Rest service " + desc;
-        } else {
-            System.out.println("Failed to make a request. Please set correct apikey");
-            return pendingRequest;
+    public List<Subscription> subscriptions(MessageContext context, Status status) {
+        List request = new ArrayList<>();
+        String desc = "fetch all subscription";
+        if (status != null) {
+            String stringStatus = status.equals(Status.PENDING) ?
+                                    "pending" :
+                                        status.equals(Status.ACCEPTED) ?
+                                                "accepted" : "rejected";
+            desc = "fetch all " + stringStatus + " subscription";
         }
 
-        this.writeToLog(context, desc);
-        pendingRequest = this.subscriptionDAO.findAllWithStatus(Status.PENDING);
-        return pendingRequest;
-    }
+        desc = this.helper.validate(context, desc);
 
-    private void writeToLog(MessageContext messageContext, String description) {
-        HttpExchange exchange = (HttpExchange) messageContext.get(JAXWSProperties.HTTP_EXCHANGE);
-        String ip = exchange.getRemoteAddress().getHostName();
-
-        String endpoint = (String) messageContext.get(MessageContext.PATH_INFO);
-        endpoint = endpoint == null ? "/ws/subscription" : endpoint;
-
-        long currentTimestamp = System.currentTimeMillis();
-        this.logDAO.insert(new Log(description, ip, endpoint, currentTimestamp));
+        if ((desc.substring(0,6)).equals("Failed")) {
+            System.out.println(desc);
+            return request;
+        }
+        this.helper.writeToLog(context, desc, "http://localhost:4790/ws/subscription");
+        request = this.subscriptionDAO.findAllStatus(status);
+        return request;
     }
 }

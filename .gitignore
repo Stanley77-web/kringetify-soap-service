@@ -1,7 +1,11 @@
 .idea/
 .metadata
 .out
-
+lib
 META-INF
 out
 Test.java
+jar_files(2)
+jar_files(2).zip
+com/kringetify/ws/LoggingWebService.java
+com/kringetify/ws/LoggingWebServiceImpl.class
