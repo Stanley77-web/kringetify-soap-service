@@ -4,9 +4,9 @@
 lib
 META-INF
 out
+test/
 Test.java
 jar_files(2)
 jar_files(2).zip
 com/kringetify/ws/LoggingWebService.java
 com/kringetify/ws/LoggingWebServiceImpl.class
-soap-service.*
