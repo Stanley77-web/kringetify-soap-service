@@ -1,13 +1,10 @@
 package com.kringetify.ws.impl;
 
-import com.kringetify.dao.SubscriptionDAO;
 import com.kringetify.handlers.CheckStatusHandler;
 import com.kringetify.models.Status;
 import com.kringetify.models.Subscription;
 import com.kringetify.ws.CheckStatusWS;
-
 import javax.annotation.Resource;
-import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 import java.util.List;

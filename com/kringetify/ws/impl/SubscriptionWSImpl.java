@@ -4,7 +4,6 @@ import com.kringetify.handlers.SubscriptionHandler;
 import com.kringetify.models.Status;
 import com.kringetify.models.Subscription;
 import com.kringetify.ws.SubscriptionWS;
-
 import javax.annotation.Resource;
 import javax.jws.*;
 import javax.xml.ws.WebServiceContext;

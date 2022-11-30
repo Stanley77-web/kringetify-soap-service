@@ -1,18 +1,16 @@
 package com.kringetify.handlers;
 
-import com.kringetify.dao.LogDAO;
 import com.kringetify.dao.SubscriptionDAO;
 import com.kringetify.models.Status;
 import com.kringetify.models.Subscription;
 import com.kringetify.utils.Helper;
-import io.github.cdimascio.dotenv.Dotenv;
-
 import javax.xml.ws.handler.MessageContext;
 import java.util.List;
 
 public class CheckStatusHandler {
     private SubscriptionDAO subscriptionDAO;
     private Helper helper;
+    private String endPoint = "/ws/checkstatus";
 
     public CheckStatusHandler() {
         this.subscriptionDAO = new SubscriptionDAO();
@@ -27,7 +25,7 @@ public class CheckStatusHandler {
             System.out.println(desc);
             return null;
         }
-        this.helper.writeToLog(context, desc, "/ws/checkstatus");
+        this.helper.writeToLog(context, desc, this.endPoint);
         return this.subscriptionDAO.findStatusById(subs);
     }
 
@@ -39,7 +37,7 @@ public class CheckStatusHandler {
             System.out.println(desc);
             return null;
         }
-        this.helper.writeToLog(context, desc, "/ws/checkstatus");
+        this.helper.writeToLog(context, desc, this.endPoint);
         return this.subscriptionDAO.findById(subcriberId);
     }
 }

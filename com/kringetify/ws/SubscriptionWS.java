@@ -1,6 +1,5 @@
 package com.kringetify.ws;
 
-import com.kringetify.models.Status;
 import com.kringetify.models.Subscription;
 
 import javax.jws.*;

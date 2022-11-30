@@ -1,16 +1,9 @@
 package com.kringetify.handlers;
 
 import com.kringetify.dao.*;
-import com.kringetify.models.Log;
 import com.kringetify.models.Status;
 import com.kringetify.models.Subscription;
 import com.kringetify.utils.Helper;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.xml.internal.ws.api.message.Header;
-import com.sun.xml.internal.ws.api.message.HeaderList;
-import com.sun.xml.internal.ws.developer.JAXWSProperties;
-import io.github.cdimascio.dotenv.Dotenv;
-
 import javax.xml.ws.handler.MessageContext;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +11,7 @@ import java.util.List;
 public class SubscriptionHandler {
     private SubscriptionDAO subscriptionDAO;
     private Helper helper;
+    private String endPoint = "/ws/subscription";
 
     public SubscriptionHandler() {
         this.subscriptionDAO = new SubscriptionDAO();
@@ -32,7 +26,7 @@ public class SubscriptionHandler {
             System.out.println(desc);
             return desc;
         }
-        this.helper.writeToLog(context, desc, "/ws/subscription");
+        this.helper.writeToLog(context, desc, this.endPoint);
         return this.subscriptionDAO.create(subscription);
     }
 
@@ -45,7 +39,7 @@ public class SubscriptionHandler {
             System.out.println(desc);
             return desc;
         }
-        this.helper.writeToLog(context, desc, "/ws/subscription");
+        this.helper.writeToLog(context, desc, this.endPoint);
         return this.subscriptionDAO.updateStatus(subscription);
     }
 
@@ -66,7 +60,7 @@ public class SubscriptionHandler {
             System.out.println(desc);
             return request;
         }
-        this.helper.writeToLog(context, desc, "/ws/subscription");
+        this.helper.writeToLog(context, desc, this.endPoint);
         request = this.subscriptionDAO.findAllStatus(status);
         return request;
     }
