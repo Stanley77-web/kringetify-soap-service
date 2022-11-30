@@ -14,7 +14,7 @@ services:
             - "8080:8080"
     db:
         image: mysql:latest
-        container_name: mysql
+        container_name: mysql-soap
         volumes:
             - ./com/kringetify/database/kringetify_soap.sql:/data/apps/soap.sql
         command: --init-file /data/apps/soap.sql
@@ -24,4 +24,4 @@ services:
             MYSQL_USER: kringetify
             MYSQL_PASSWORD: soap_service
         ports:
-            - "3306:3306"
+            - "3307:3306"

@@ -15,8 +15,8 @@ public interface SubscriptionWS {
     public String makeApproval(@WebParam(name = "creatorId") int creatorId,
                                @WebParam(name = "subscriberId") int subscriberId,
                                @WebParam(name = "approval") boolean approval);
-    @WebMethod(operationName = "pendingstatus") @WebResult(name = "SubsResponse")
+    @WebMethod(operationName = "pendingstatus")
     public List<Subscription> findPendingSubscriptions();
-    @WebMethod(operationName = "allstatus") @WebResult(name = "subsResponse")
+    @WebMethod(operationName = "allstatus")
     public List<Subscription> findAllSubscriptions();
 }

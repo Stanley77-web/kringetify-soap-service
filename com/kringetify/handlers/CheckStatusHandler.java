@@ -27,7 +27,7 @@ public class CheckStatusHandler {
             System.out.println(desc);
             return null;
         }
-        this.helper.writeToLog(context, desc, "http://localhost:4790/ws/checkstatus");
+        this.helper.writeToLog(context, desc, "/ws/checkstatus");
         return this.subscriptionDAO.findStatusById(subs);
     }
 
@@ -39,7 +39,7 @@ public class CheckStatusHandler {
             System.out.println(desc);
             return null;
         }
-        this.helper.writeToLog(context, desc, "http://localhost:4790/ws/checkstatus");
+        this.helper.writeToLog(context, desc, "/ws/checkstatus");
         return this.subscriptionDAO.findById(subcriberId);
     }
 }

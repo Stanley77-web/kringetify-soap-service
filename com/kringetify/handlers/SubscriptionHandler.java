@@ -32,7 +32,7 @@ public class SubscriptionHandler {
             System.out.println(desc);
             return desc;
         }
-        this.helper.writeToLog(context, desc, "http://localhost:4790/ws/subscription");
+        this.helper.writeToLog(context, desc, "/ws/subscription");
         return this.subscriptionDAO.create(subscription);
     }
 
@@ -45,7 +45,7 @@ public class SubscriptionHandler {
             System.out.println(desc);
             return desc;
         }
-        this.helper.writeToLog(context, desc, "http://localhost:4790/ws/subscription");
+        this.helper.writeToLog(context, desc, "/ws/subscription");
         return this.subscriptionDAO.updateStatus(subscription);
     }
 
@@ -66,7 +66,7 @@ public class SubscriptionHandler {
             System.out.println(desc);
             return request;
         }
-        this.helper.writeToLog(context, desc, "http://localhost:4790/ws/subscription");
+        this.helper.writeToLog(context, desc, "/ws/subscription");
         request = this.subscriptionDAO.findAllStatus(status);
         return request;
     }

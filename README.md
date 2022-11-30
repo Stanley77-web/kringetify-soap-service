@@ -8,7 +8,7 @@ Repository ini merupakan service soap untuk Kringetify Premium dengan menggunaka
 ## Run
 Gunakan script `docker build -t webservice:lastest .` pada terminal untuk build soap service<br>
 Gunakan script `docker-compose up` pada terminal untuk database masukkan <br><br><br>
-Tembak endpoint `http://localhost:4790/ws/subscription?wsdl` pada postman untuk melakukan request service subscription<br>
+Tembak endpoint `http://localhost:8080/ws/subscription?wsdl` pada postman untuk melakukan request service subscription<br>
 - Request create buat envelope xml seperti dibawah ini
 ```
   <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
@@ -62,7 +62,7 @@ Tembak endpoint `http://localhost:4790/ws/subscription?wsdl` pada postman untuk 
 ```
 
 <br><br>
-Tembak endpoint `http://localhost:4790/ws/checkstatus?wsdl` pada postman untuk melakukan request service check status<br>
+Tembak endpoint `http://localhost:8080/ws/checkstatus?wsdl` pada postman untuk melakukan request service check status<br>
 - Request check status subs buat envelope xml seperti dibawah ini
 ```
   <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
