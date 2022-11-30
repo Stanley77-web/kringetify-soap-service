@@ -1,5 +1,7 @@
-FROM php:7.1-apache
+FROM openjdk:8
 
-RUN docker-php-ext-install pdo pdo_mysql
+COPY soap-service.jar /user/apps.jar
 
-COPY ./com/database/dump.sql /docker-entrypoint-initdb.d/
+EXPOSE 8080
+
+CMD ["java", "-jar", "/user/apps.jar"]

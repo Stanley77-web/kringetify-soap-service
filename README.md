@@ -6,8 +6,8 @@
 
 Repository ini merupakan service soap untuk Kringetify Premium dengan menggunakan Jax-WS
 ## Run
-Gunakan script `docker-compose up` pada terminal untuk database masukkan <br>
-Gunakan script `java -jar soap-service.jar` pada terminal untuk soap service<br><br><br>
+Gunakan script `docker build -t webservice:lastest .` pada terminal untuk build soap service<br>
+Gunakan script `docker-compose up` pada terminal untuk database masukkan <br><br><br>
 Tembak endpoint `http://localhost:4790/ws/subscription?wsdl` pada postman untuk melakukan request service subscription<br>
 - Request create buat envelope xml seperti dibawah ini
 ```
