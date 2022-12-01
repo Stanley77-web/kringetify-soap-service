@@ -8,7 +8,7 @@ public class Database {
     public Database() {
         try {
             String url = System.getenv("JDBC_URL") == null || System.getenv("DATABASE_NAME") == null ?
-                    "jdbc:mysql://localhost:3306/kringetify_soap_service" :
+                    "jdbc:mysql://localhost:3309/kringetify_soap_service" :
                     System.getenv("JDBC_URL") + System.getenv("DATABASE_NAME");
 
             String user = System.getenv("JDBC_USER") == null ?

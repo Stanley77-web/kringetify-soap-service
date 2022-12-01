@@ -24,4 +24,4 @@ services:
             MYSQL_USER: kringetify
             MYSQL_PASSWORD: soap_service
         ports:
-            - "3307:3306"
+            - "3309:3306"

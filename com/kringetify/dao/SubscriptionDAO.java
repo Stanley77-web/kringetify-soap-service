@@ -118,6 +118,7 @@ public class SubscriptionDAO {
             ResultSet resultSet = stmt.executeQuery();
 
             if (!resultSet.next()) {
+                System.out.println("Failed. Don't have any subscription");
                 return status;
             }
 
