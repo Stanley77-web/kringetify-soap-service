@@ -11,7 +11,10 @@ import java.util.List;
 public class SubscriptionHandler {
     private SubscriptionDAO subscriptionDAO;
     private Helper helper;
+    private CallbackHandler callbackHandler;
     private String endPoint = "/ws/subscription";
+    private String URLCallback = "http://localhost:3003/api/update-subs";
+
 
     public SubscriptionHandler() {
         this.subscriptionDAO = new SubscriptionDAO();
@@ -22,7 +25,7 @@ public class SubscriptionHandler {
         String desc = subscription.toString();
         desc = this.helper.validate(context, desc);
 
-        if ((desc.substring(0,6)).equals("Failed")) {
+        if ((desc).startsWith("Failed")) {
             System.out.println(desc);
             return desc;
         }
@@ -30,17 +33,26 @@ public class SubscriptionHandler {
         return this.subscriptionDAO.create(subscription);
     }
 
-    public String makeApproval(int creator_id, int subscriber_id, boolean approval, MessageContext context) {
-        Subscription subscription = new Subscription(creator_id, subscriber_id, approval ? Status.ACCEPTED : Status.REJECTED);
-        String desc = (approval ? "accept " : "reject ") + subscriber_id + " subscription request to " + creator_id;
+    public String makeApproval(int creatorId, int subscriberId, boolean approval, MessageContext context) {
+        Subscription subscription = new Subscription(creatorId, subscriberId, approval ? Status.ACCEPTED : Status.REJECTED);
+        String desc = (approval ? "accept " : "reject ") + subscriberId + " subscription request to " + creatorId;
         desc = this.helper.validate(context, desc);
 
-        if ((desc.substring(0,6)).equals("Failed")) {
+        if ((desc).startsWith("Failed")) {
             System.out.println(desc);
             return desc;
         }
         this.helper.writeToLog(context, desc, this.endPoint);
-        return this.subscriptionDAO.updateStatus(subscription);
+        String res = this.subscriptionDAO.updateStatus(subscription);
+
+        if (!res.startsWith("Failed")) {
+            this.callbackHandler = new CallbackHandler(this.URLCallback);
+            this.callbackHandler.setEntityBody(
+                    creatorId, subscriberId, approval ?
+                            Status.ACCEPTED: Status.REJECTED);
+            res = this.callbackHandler.post();
+        }
+        return res;
     }
 
     public List<Subscription> subscriptions(MessageContext context, Status status) {
@@ -56,7 +68,7 @@ public class SubscriptionHandler {
 
         desc = this.helper.validate(context, desc);
 
-        if ((desc.substring(0,6)).equals("Failed")) {
+        if ((desc).startsWith("Failed")) {
             System.out.println(desc);
             return request;
         }

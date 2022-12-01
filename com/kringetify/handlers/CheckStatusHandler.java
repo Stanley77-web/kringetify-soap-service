@@ -21,7 +21,7 @@ public class CheckStatusHandler {
         String desc = "check status subscription";
         desc = this.helper.validate(context, desc);
 
-        if ((desc.substring(0,6)).equals("Failed")) {
+        if ((desc).startsWith("Failed")) {
             System.out.println(desc);
             return null;
         }
@@ -33,7 +33,7 @@ public class CheckStatusHandler {
         String desc = "check user subscription";
         desc = this.helper.validate(context, desc);
 
-        if ((desc.substring(0,6)).equals("Failed")) {
+        if ((desc).startsWith("Failed")) {
             System.out.println(desc);
             return null;
         }
