@@ -3,8 +3,12 @@
 
 
 ## Deskripsi
-
 Repository ini merupakan service soap untuk Kringetify Premium dengan menggunakan Jax-WS
+
+## DB Scheme
+![DB scheme](https://media.discordapp.net/attachments/893484082275708980/1048135834903269396/image.png)
+
+
 ## Run
 Gunakan script `docker build -t webservice:lastest .` pada terminal untuk build soap service<br>
 Gunakan script `docker-compose up` pada terminal untuk database masukkan <br><br><br>
@@ -91,10 +95,16 @@ Tembak endpoint `http://localhost:8080/ws/checkstatus?wsdl` pada postman untuk m
   </Envelope>
 ```
 
-
 ## Spefisikasi
 - Java 8
 - Mysql
-## Screenshot
 
 ## Pembagian Tugas
+Timothy Stanley Setiawan - 13520028
+Jeremy Rionaldo Pasaribu - 13520082
+Farrel Farandieka Fibriyanto - 1352054
+
+- Polling : 13520028, 13520082, 13520054
+- Security : 13520082
+- Approval/Rejection Subs : 13520054
+- Subscription Request : 13520028
