@@ -10,7 +10,7 @@ import java.util.List;
 public class CheckStatusHandler {
     private SubscriptionDAO subscriptionDAO;
     private Helper helper;
-    private String endPoint = "/ws/checkstatus";
+    private final String endPoint = "/ws/checkstatus";
 
     public CheckStatusHandler() {
         this.subscriptionDAO = new SubscriptionDAO();

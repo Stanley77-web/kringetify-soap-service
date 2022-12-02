@@ -12,9 +12,10 @@ import java.util.*;
 public class SubscriptionDAO {
     private Database db;
 
-    public SubscriptionDAO() { this.db = new Database();  }
+    public SubscriptionDAO() {  }
 
     public String create(Subscription subs) {
+        this.db = new Database();
         try {
             String query = "INSERT INTO subscription (creator_id, subscriber_id) VALUES (?,?)";
             PreparedStatement stmt = db.prepare(query);
@@ -22,12 +23,15 @@ public class SubscriptionDAO {
             stmt.setInt(2, subs.getSubscriberId());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            this.db.closeCon();
             return  "Failed. Request has been made";
         }
+        this.db.closeCon();
         return "Success to make a request";
     }
 
     public String updateStatus(Subscription subs) {
+        this.db = new Database();
         String query = "SELECT * FROM subscription WHERE creator_id = ? AND subscriber_id = ?";
         try {
             PreparedStatement stmt = db.prepare(query);
@@ -53,14 +57,17 @@ public class SubscriptionDAO {
             stmt.setInt(3, subs.getSubscriberId());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            this.db.closeCon();
             return "Failed to " + subs.getStatus().toString().toLowerCase()
                     + " " + subs.getSubscriberId() + " subscribe request to " + subs.getCreatorId() + ". " + e.getMessage();
         }
+        this.db.closeCon();
         return "Success to " + subs.getStatus().toString().toLowerCase()
                 + " " + subs.getSubscriberId() + " subscribe request to " + subs.getCreatorId();
     }
 
     public List<Subscription> findAllStatus(Status status) {
+        this.db = new Database();
         List<Subscription> subscriptionList = new ArrayList<>();
         String query = "SELECT * FROM subscription";
         boolean all = true;
@@ -92,12 +99,15 @@ public class SubscriptionDAO {
                 subscriptionList.add(new Subscription(creator_id, subscriber_id, status));
             }
         } catch (SQLException e) {
+            this.db.closeCon();
             System.out.println("Failed to fetch data. " + e.getMessage());
         }
+        this.db.closeCon();
         return subscriptionList;
     }
 
     public Status findStatusById(Subscription subs) {
+        this.db = new Database();
         String query = "SELECT * FROM subscription WHERE creator_id = ? AND subscriber_id = ?";
         Status status = null;
 
@@ -128,12 +138,15 @@ public class SubscriptionDAO {
                                 Status.ACCEPTED : Status.REJECTED;
             }
         } catch (SQLException e) {
+            this.db.closeCon();
             System.out.println("Failed to fetch data. " + e.getMessage());
         }
+        this.db.closeCon();
         return status;
     }
 
     public List<Subscription> findById(int subscriberId) {
+        this.db = new Database();
         List<Subscription> subscriptionList = new ArrayList<>();
         String query = "SELECT * FROM subscription WHERE subscriber_id = ?";
         try {
@@ -154,8 +167,10 @@ public class SubscriptionDAO {
                 subscriptionList.add(new Subscription(creator_id, subscriber_id, status));
             }
         } catch (SQLException e) {
+            this.db.closeCon();
             System.out.println("Failed to fetch data. " + e.getMessage());
         }
+        this.db.closeCon();
         return subscriptionList;
     }
 }

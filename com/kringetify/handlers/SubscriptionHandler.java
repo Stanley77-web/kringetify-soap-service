@@ -12,8 +12,8 @@ public class SubscriptionHandler {
     private SubscriptionDAO subscriptionDAO;
     private Helper helper;
     private CallbackHandler callbackHandler;
-    private String endPoint = "/ws/subscription";
-    private String URLCallback = "http://localhost:3003/api/update-subs";
+    private final String endPoint = "/ws/subscription";
+    private final String URLCallback = "http://localhost:3000/api/update-subs";
 
 
     public SubscriptionHandler() {

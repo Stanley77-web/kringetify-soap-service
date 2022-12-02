@@ -33,4 +33,13 @@ public class Database {
             return null;
         }
     }
+
+    public void closeCon() {
+        try {
+            this.conn.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to close connection");
+            System.out.println(e.getMessage());
+        }
+    }
 }

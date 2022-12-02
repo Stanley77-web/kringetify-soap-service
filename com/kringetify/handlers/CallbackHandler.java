@@ -34,7 +34,7 @@ public class CallbackHandler {
     }
 
     public String post() {
-        String res;
+        String res = null;
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             CloseableHttpResponse response = httpClient.execute(this.httpPost);
@@ -42,8 +42,23 @@ public class CallbackHandler {
             System.out.println(response.getCode() + " | " + response.getReasonPhrase() + " -version " + response.getVersion());
 
             HttpEntity entity = response.getEntity();
-            res = EntityUtils.toString(entity);
+            String entityStr = EntityUtils.toString(entity);
             EntityUtils.consume(entity);
+
+            if (entityStr == null) {
+                res = "Response message no set";
+            } else {
+                String[] payload = (entityStr.substring(1,entityStr.length()-1)).split(",");
+
+                for (String data : payload) {
+                    String value = data.split(":")[0];
+                    if ((value.substring(1, value.length()-1)).equals("message")) {
+                        res = data.split(":")[1];
+                        res = res.substring(1, res.length()-1);
+                    }
+                }
+            }
+
         } catch (IOException | ParseException e) {
             e.printStackTrace();
             return "Failed. Internal server error";

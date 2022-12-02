@@ -8,13 +8,14 @@ import java.sql.SQLException;
 
 
 public class LogDAO {
-    private final Database db;
+    private Database db;
 
     public LogDAO() {
-        this.db = new Database();
+
     }
 
     public void insert(Log log) {
+        this.db = new Database();
         String query = "INSERT INTO logging (description, IP, endpoint, requested_at) VALUES (?,?,?,?)";
         PreparedStatement stmt = db.prepare(query);
         try {
@@ -25,8 +26,9 @@ public class LogDAO {
             stmt.setTimestamp(4, log.getRequestedAt());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            this.db.closeCon();
             System.out.println("Failed to Insert. " + e.getMessage());
         }
+        this.db.closeCon();
     }
-
 }
